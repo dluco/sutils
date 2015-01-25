@@ -24,8 +24,10 @@ int put_infos(char *path, char *format)
 
     char line[MAXLEN] = {0};
     char status[MAXLEN] = {0};
+    char *status_str;
     int capacity = -1;
     bool found_status = false, found_capacity = false;
+
     while (fgets(line, sizeof(line), bf) != NULL) {
         char *key = strtok(line, TOKSEP);
         if (key != NULL) { 
@@ -39,19 +41,30 @@ int put_infos(char *path, char *format)
         }
     }
     fclose(bf);
+
     if (!found_capacity || !found_status) {
         fprintf(stderr, "The battery informations are missing.\n");
         return EXIT_FAILURE;
-    } else {
-        if (strstr(format, "%s") == NULL)
-            printf(format, capacity);
-        else if (strstr(format, "%i") == NULL)
-            printf(format, status);
-        else
-            printf(format, status, capacity);
-        printf("\n");
-        fflush(stdout);
     }
+
+    /* status abbreviation */
+    if (strcmp(status, "Discharging") == 0) {
+        status_str = "BAT";
+    } else if (strcmp(status, "Charging") == 0) {
+        status_str = "CHR";
+    } else {
+        status_str = "";
+    }
+
+    if (strstr(format, "%s") == NULL)
+        printf(format, capacity);
+    else if (strstr(format, "%i") == NULL)
+        printf(format, status_str);
+    else
+        printf(format, status_str, capacity);
+    printf("\n");
+    fflush(stdout);
+
     return EXIT_SUCCESS;
 }
 

@@ -4,7 +4,7 @@ CFLAGS  += -std=c99 -pedantic -Wall -Wextra -I$(PREFIX)/include
 CFLAGS  += -D_POSIX_C_SOURCE=200112L
 LDFLAGS += -L$(PREFIX)/lib
 
-PREFIX    ?= /usr/local
+PREFIX    ?= /usr
 BINPREFIX  = $(PREFIX)/bin
 
 SRC = $(wildcard *.c)
@@ -27,7 +27,7 @@ debug: $(BIN)
 $(BIN): Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.c $(LIBS)
 
-install:
+install: all
 	mkdir -p "$(DESTDIR)$(BINPREFIX)"
 	cp -p $(BIN) "$(DESTDIR)$(BINPREFIX)"
 

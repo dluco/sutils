@@ -143,6 +143,7 @@ int main(int argc, char *argv[])
     snd_ctl_elem_value_free(volume_ctl);
     snd_ctl_elem_value_free(mute_ctl);
     snd_ctl_elem_info_free(volume_info);
+
     return exit_code;
 }
 
